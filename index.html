@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Signal JS — образовательная платформа по JavaScript</title>
+  <meta name="description" content="Signal JS — светлая интерактивная платформа для диагностики и тренировки знаний по JavaScript." />
+  <link rel="stylesheet" href="./styles/main.css" />
+</head>
+<body>
+  <div id="startup-overlay" class="startup-overlay is-visible" aria-live="polite">
+    <div id="startup-logo-step" class="startup-step startup-logo is-active" aria-hidden="false">
+      <div class="startup-logo-mark">S</div>
+    </div>
+
+    <div id="startup-brand-step" class="startup-step startup-brand" aria-hidden="true">
+      <div class="startup-brand-mark">S</div>
+      <div class="startup-brand-copy">
+        <div class="startup-eyebrow">Signal JS</div>
+        <h1>Платформа диагностики знаний по JavaScript</h1>
+        <p>Четыре уровня, два режима и понятный разбор слабых мест без шаблонного учебного шума.</p>
+      </div>
+    </div>
+
+    <div id="startup-onboarding-step" class="startup-step startup-onboarding" aria-hidden="true">
+      <div class="onboarding-card">
+        <div class="startup-eyebrow">Первый вход</div>
+        <h2>Создай локальный профиль</h2>
+        <p class="startup-text">Профиль нужен для истории попыток, статистики и подписи файлов экспорта. Всё хранится только в браузере.</p>
+
+        <form id="onboarding-form" class="profile-form" novalidate>
+          <label class="field">
+            <span>Имя</span>
+            <input id="onboarding-name" name="name" type="text" maxlength="40" placeholder="Например, Вадим" />
+          </label>
+
+          <label class="field">
+            <span>Ник</span>
+            <input id="onboarding-nickname" name="nickname" type="text" maxlength="30" placeholder="Например, sanset" />
+          </label>
+
+          <label class="field">
+            <span>Цель</span>
+            <input id="onboarding-goal" name="goal" type="text" maxlength="90" placeholder="Например, закрыть базу JavaScript и дойти до уверенного junior" />
+          </label>
+
+          <div id="onboarding-message" class="inline-message is-hidden" role="status" aria-live="polite"></div>
+
+          <div class="actions-row">
+            <button type="submit" class="button">Войти в Signal JS</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="mode-modal" class="modal-backdrop is-hidden" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="mode-modal-title">
+      <button id="close-mode-modal" class="icon-button" type="button" aria-label="Закрыть окно выбора режима">×</button>
+      <div class="startup-eyebrow">Выбор режима</div>
+      <h2 id="mode-modal-title">Старт теста</h2>
+      <p id="mode-modal-text" class="modal-text"></p>
+      <div id="mode-modal-meta" class="modal-meta"></div>
+      <div class="modal-actions vertical">
+        <button id="start-training-button" class="button" type="button">Тренировка</button>
+        <button id="start-exam-button" class="button button-secondary" type="button">Экзамен</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="page-shell" class="page-shell is-hidden">
+    <header class="topbar">
+      <button class="brand-button" data-view="home" aria-label="Перейти на главную">
+        <span class="brand-mark">S</span>
+        <span class="brand-copy">
+          <span class="brand-title">Signal JS</span>
+          <span class="brand-subtitle">Диагностика и тренировка знаний по JavaScript</span>
+        </span>
+      </button>
+
+      <nav class="nav" aria-label="Основная навигация">
+        <button class="nav-button is-active" data-view="home">Главная</button>
+        <button class="nav-button" data-view="catalog">Тесты</button>
+        <button class="nav-button" data-view="profile">Профиль</button>
+      </nav>
+    </header>
+
+    <main class="layout">
+      <section class="view is-active" id="view-home" aria-labelledby="home-title">
+        <div class="panel hero-panel solo">
+          <div class="hero-topline">
+            <div class="eyebrow">Signal JS</div>
+            <div class="hero-note">Диагностика знаний · JavaScript</div>
+          </div>
+          <h1 id="home-title" class="hero-title wide">Платформа, которая не просто считает баллы, а показывает слабые места в логике JavaScript.</h1>
+          <p class="hero-text wide">
+            Четыре уровня сложности, два режима прохождения и понятный разбор ответов.
+            В тренировке объяснение появляется сразу после ответа. В экзамене — только после завершения теста.
+          </p>
+          <div class="hero-signal-row" aria-label="Ключевые возможности">
+            <span class="signal-tag">4 уровня</span>
+            <span class="signal-tag">2 режима</span>
+            <span class="signal-tag">таймер</span>
+            <span class="signal-tag">разбор ошибок</span>
+          </div>
+        </div>
+
+        <section class="panel info-panel">
+          <div class="section-head">
+            <h2>Как работает платформа</h2>
+          </div>
+          <div class="feature-grid">
+            <div class="feature-card">
+              <span class="feature-index">01</span>
+              <h3>Выбор уровня</h3>
+              <p>От базового синтаксиса до замыканий, event loop и архитектурного мышления.</p>
+            </div>
+            <div class="feature-card">
+              <span class="feature-index">02</span>
+              <h3>Два режима</h3>
+              <p>Тренировка показывает объяснение сразу. Экзамен проверяет знания без подсказок до финала.</p>
+            </div>
+            <div class="feature-card">
+              <span class="feature-index">03</span>
+              <h3>Разбор ошибок</h3>
+              <p>После завершения видны темы, проценты, верные ответы и рекомендации по слабым местам.</p>
+            </div>
+            <div class="feature-card">
+              <span class="feature-index">04</span>
+              <h3>Локальная история</h3>
+              <p>Профиль, результаты и статистика сохраняются в браузере и доступны после перезагрузки.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="section-head">
+            <h2>Уровни платформы</h2>
+          </div>
+          <div id="home-levels" class="level-preview-grid"></div>
+        </section>
+      </section>
+
+      <section class="view" id="view-catalog" aria-labelledby="catalog-title">
+        <div class="panel">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Каталог</div>
+              <h1 id="catalog-title" class="section-title">Тесты по JavaScript</h1>
+            </div>
+          </div>
+          <div id="catalog-grid" class="catalog-grid"></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-test" aria-labelledby="test-title">
+        <div class="panel test-panel">
+          <div class="test-topbar">
+            <div>
+              <div class="eyebrow" id="test-mode-badge">Режим</div>
+              <h1 id="test-title" class="section-title">Тест</h1>
+              <p id="test-description" class="section-text"></p>
+            </div>
+            <div class="test-meta">
+              <div class="stat-box compact">
+                <span class="stat-label">Осталось</span>
+                <strong class="stat-value" id="timer-value">00:00</strong>
+              </div>
+              <div class="stat-box compact">
+                <span class="stat-label">Прогресс</span>
+                <strong class="stat-value" id="progress-text">0 / 0</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="progress-wrap" aria-hidden="true">
+            <div id="progress-bar" class="progress-bar"></div>
+          </div>
+
+          <div class="test-layout">
+            <aside class="question-map panel panel-ghost">
+              <div class="section-head small">
+                <h2>Навигация</h2>
+              </div>
+              <div id="question-map" class="question-chip-grid"></div>
+              <div id="map-legend" class="map-legend"></div>
+            </aside>
+
+            <div class="question-area">
+              <article class="question-card">
+                <div class="question-meta">
+                  <span id="question-number" class="question-index">Вопрос 1</span>
+                  <span id="question-topic" class="topic-pill">Тема</span>
+                </div>
+                <h2 id="question-text" class="question-title"></h2>
+                <div id="question-options" class="options-list" role="radiogroup" aria-label="Варианты ответа"></div>
+                <div id="feedback-box" class="feedback-box is-hidden"></div>
+              </article>
+
+              <div class="actions-row spread">
+                <button id="prev-question-button" class="button button-secondary">Назад</button>
+                <div class="actions-inline">
+                  <button id="finish-test-button" class="button button-ghost">Завершить тест</button>
+                  <button id="next-question-button" class="button">Далее</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-result" aria-labelledby="result-title">
+        <div class="panel">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Результат</div>
+              <h1 id="result-title" class="section-title">Итог попытки</h1>
+            </div>
+            <div class="actions-inline">
+              <button id="export-attempt-button" class="button button-secondary">Экспорт попытки в CSV</button>
+              <button class="button" data-view="catalog">К другим тестам</button>
+            </div>
+          </div>
+
+          <div id="result-summary" class="summary-grid"></div>
+
+          <div class="result-columns">
+            <article class="panel panel-ghost">
+              <div class="section-head small">
+                <h2>Сильные и слабые темы</h2>
+              </div>
+              <div id="result-topics"></div>
+            </article>
+
+            <article class="panel panel-ghost">
+              <div class="section-head small">
+                <h2>Рекомендации</h2>
+              </div>
+              <div id="result-recommendations" class="recommendations-list"></div>
+            </article>
+          </div>
+
+          <article class="panel panel-ghost">
+            <div class="section-head small">
+              <h2>Разбор ответов</h2>
+            </div>
+            <div id="result-review-list" class="review-list"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="view-profile" aria-labelledby="profile-title">
+        <div class="profile-grid">
+          <article class="panel">
+            <div class="section-head">
+              <div>
+                <div class="eyebrow">Локальный профиль</div>
+                <h1 id="profile-title" class="section-title">Параметры пользователя</h1>
+              </div>
+            </div>
+
+            <form id="profile-form" class="profile-form" novalidate>
+              <label class="field">
+                <span>Имя</span>
+                <input id="profile-name" name="name" type="text" maxlength="40" placeholder="Например, Вадим" />
+                <small class="field-hint">Используется для отображения в профиле и файлах экспорта.</small>
+              </label>
+
+              <label class="field">
+                <span>Ник</span>
+                <input id="profile-nickname" name="nickname" type="text" maxlength="30" placeholder="Например, sanset" />
+              </label>
+
+              <label class="field">
+                <span>Цель</span>
+                <input id="profile-goal" name="goal" type="text" maxlength="90" placeholder="Например, закрыть базу JavaScript и дойти до уверенного junior" />
+              </label>
+
+              <div id="profile-message" class="inline-message is-hidden" role="status" aria-live="polite"></div>
+
+              <div class="actions-row">
+                <button type="submit" class="button">Сохранить профиль</button>
+                <button type="button" id="reset-profile-button" class="button button-secondary">Сбросить профиль</button>
+              </div>
+            </form>
+
+            <div class="note-card">
+              <strong>Важно:</strong> профиль локальный. Почта и пароль не нужны, потому что сайт работает без бэкенда и хранит данные в браузере.
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="section-head">
+              <h2>История и статистика</h2>
+              <div class="actions-inline">
+                <button id="export-history-button" class="button button-secondary">Экспорт всей истории в CSV</button>
+                <button id="clear-history-button" class="button button-ghost">Очистить историю</button>
+              </div>
+            </div>
+
+            <div class="mini-stats">
+              <div class="stat-box">
+                <span class="stat-label">Всего попыток</span>
+                <strong class="stat-value" id="profile-total-attempts">0</strong>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Лучший результат</span>
+                <strong class="stat-value" id="profile-best-score">0%</strong>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Средний балл</span>
+                <strong class="stat-value" id="profile-average-score">0%</strong>
+              </div>
+            </div>
+
+            <div id="history-list" class="history-list"></div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-line"></div>
+      <p>Учебный веб-проект Signal JS. Статическая платформа на HTML, CSS и JavaScript с локальным хранением профиля и результатов.</p>
+    </footer>
+  </div>
+
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>
