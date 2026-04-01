@@ -474,7 +474,6 @@ function renderLegend() {
   const isTraining = state.activeSession.mode === "training";
   refs.mapLegend.innerHTML = `
     <span><i class="chip-key current"></i> текущий</span>
-    // <span><i class="chip-key answered"></i> отвечен</span>
     ${isTraining ? '<span><i class="chip-key right"></i> верный</span><span><i class="chip-key wrong"></i> ошибка</span>' : ''}
   `;
 }
