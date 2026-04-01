@@ -1,8 +1,18 @@
+
 export function formatTime(totalSeconds) {
   const safe = Math.max(0, Number(totalSeconds) || 0);
   const minutes = String(Math.floor(safe / 60)).padStart(2, "0");
   const seconds = String(safe % 60).padStart(2, "0");
   return `${minutes}:${seconds}`;
+}
+
+export function pluralizeAttempts(value) {
+  const abs = Math.abs(value) % 100;
+  const last = abs % 10;
+  if (abs > 10 && abs < 20) return "попыток";
+  if (last > 1 && last < 5) return "попытки";
+  if (last === 1) return "попытка";
+  return "попыток";
 }
 
 export function percent(value, total) {
@@ -23,6 +33,33 @@ export function uid(prefix = "id") {
   return `${prefix}-${Date.now()}-${random}`;
 }
 
+export function downloadCSV(filename, rows) {
+  const normalizedRows = Array.isArray(rows) ? rows : [];
+  if (!normalizedRows.length) return;
+
+  const headers = [...new Set(normalizedRows.flatMap((row) => Object.keys(row)))];
+  const escapeCell = (value) => {
+    const text = String(value ?? "").replaceAll('"', '""');
+    return `"${text}"`;
+  };
+
+  const lines = [headers.map(escapeCell).join(';')];
+  normalizedRows.forEach((row) => {
+    lines.push(headers.map((header) => escapeCell(row[header] ?? "")).join(';'));
+  });
+
+  const csv = `\uFEFF${lines.join('\r\n')}`;
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
 export function escapeHtml(value = "") {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -39,22 +76,4 @@ export function average(values) {
 
 export function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
-}
-
-function escapeCsvCell(value = "") {
-  const safe = String(value ?? "").replaceAll("\r", " ").replaceAll("\n", " ");
-  return `"${safe.replaceAll('"', '""')}"`;
-}
-
-export function downloadCSV(filename, rows) {
-  const body = rows.map((row) => row.map(escapeCsvCell).join(";")).join("\n");
-  const blob = new Blob(["\uFEFF", body], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = filename;
-  document.body.append(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
 }
